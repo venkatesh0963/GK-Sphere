@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #6C63FF;
+  --color-primary-dark: #7F5AF0;
+  --color-secondary: #2CB67D;
+  
+  --color-background-light: #F5F7FA;
+  --color-background-dark: #16161A;
+  
+  --color-deep-blue: #1A1941;
+  --color-light-bg: #F8FAFC;
+  --color-gold: #FBBF24;
+  
+  --color-text-light: #16161A;
+  --color-text-dark: #F5F7FA;
+  
+  --color-success: #00C853;
+  --color-danger: #FF5252;
+
+  --shadow-clay-light: 10px 10px 20px #d0d2d5, -10px -10px 20px #ffffff;
+  --shadow-clay-light-inset: inset 10px 10px 20px #d0d2d5, inset -10px -10px 20px #ffffff;
+  --shadow-clay-dark: 10px 10px 20px #0b0b0d, -10px -10px 20px #212127;
+  --shadow-clay-dark-inset: inset 10px 10px 20px #0b0b0d, inset -10px -10px 20px #212127;
+  --shadow-clay-primary: 10px 10px 20px #5c54d9, -10px -10px 20px #7c72ff;
+  --shadow-clay-primary-inset: inset 5px 5px 10px #5c54d9, inset -5px -5px 10px #7c72ff;
+
+  --radius-clay: 20px;
+  --radius-clay-lg: 30px;
+  
+  --font-inter: 'Inter', sans-serif;
+  --font-outfit: 'Outfit', sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-background-light text-text-light font-inter;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .dark body {
+    @apply bg-background-dark text-text-dark;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-outfit;
+  }
+}
+
+@layer components {
+  /* Claymorphism utilities */
+  .clay-card {
+    @apply bg-background-light shadow-clay-light rounded-clay border transition-all duration-300;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .dark .clay-card {
+    @apply bg-background-dark shadow-clay-dark;
+    border-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .clay-btn-primary {
+    @apply bg-primary text-white shadow-clay-primary rounded-clay px-6 py-3 font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-clay-primary-inset;
+  }
+
+  .clay-btn-secondary {
+    @apply bg-background-light text-text-light shadow-clay-light rounded-clay px-6 py-3 font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg active:translate-y-0 active:shadow-clay-light-inset;
+  }
+  
+  .dark .clay-btn-secondary {
+    @apply bg-background-dark text-text-dark shadow-clay-dark active:shadow-clay-dark-inset;
+  }
+
+  .clay-input {
+    @apply bg-background-light shadow-clay-light-inset rounded-clay px-4 py-3 outline-none focus:ring-2 focus:ring-primary border-none;
+  }
+
+  .dark .clay-input {
+    @apply bg-background-dark shadow-clay-dark-inset text-text-dark focus:ring-primary;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded-full transition-colors;
+  background-color: rgba(108, 99, 255, 0.3);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(108, 99, 255, 0.5);
+}

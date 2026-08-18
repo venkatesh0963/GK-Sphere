@@ -20,7 +20,7 @@ const ContactPage = () => {
         </div>
         <div className="clay-card p-8 flex-1 flex flex-col justify-center">
           <h2 className="text-2xl font-bold mb-4">Reach Out</h2>
-          <p className="mb-2"><strong>Email:</strong> hello@gkbyte.com</p>
+          <p className="mb-2"><strong>Email:</strong> hello@gksphere.com</p>
           <p className="mb-2"><strong>Phone:</strong> +1 (555) 123-4567</p>
           <p className="mb-6"><strong>Address:</strong> 123 Knowledge Ave, Tech City</p>
           <div className="bg-gray-200 h-48 rounded-clay flex items-center justify-center shadow-clay-light-inset">

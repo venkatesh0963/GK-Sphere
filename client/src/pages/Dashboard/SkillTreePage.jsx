@@ -28,7 +28,7 @@ const SkillTreePage = () => {
 
   return (
     <>
-      <h2 className="text-2xl font-bold text-primary mb-4 text-center z-10 font-['Outfit'] absolute top-4 left-0 right-0 pointer-events-none">Knowledge Tree</h2>
+      <h2 className="text-xl sm:text-2xl font-bold text-primary mb-4 text-center z-10 font-['Outfit'] absolute top-3 sm:top-4 left-0 right-0 pointer-events-none">Knowledge Tree</h2>
       <SkillTree onNodeClick={handleStartLevel} userLevel={user.currentLevel} progressHistory={progressHistory} />
     </>
   );

@@ -1,17 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Layers, Flame, Zap, BarChart2, Trophy, Award, Play } from 'lucide-react';
+import { Layers, Flame, Zap, BarChart2, Trophy, Award, Play, Menu, X, LogIn, ArrowRight } from 'lucide-react';
 
 const LandingPage = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on ESC
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   return (
     <div className="min-h-screen font-['Outfit'] bg-light-bg overflow-x-hidden">
       
       {/* Top Section (Dark Blue) */}
-      <div className="bg-deep-blue text-white rounded-b-[60px] pb-32 relative z-10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
+      <div className="bg-deep-blue text-white rounded-b-[40px] sm:rounded-b-[60px] pb-24 sm:pb-32 relative z-10 overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.2)]">
         
         {/* Background Glowing Orbs & Stars */}
-        <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/40 rounded-full blur-[120px] pointer-events-none"></div>
-        <div className="absolute top-[20%] right-[-10%] w-[400px] h-[400px] bg-secondary/30 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-[-20%] left-[-10%] w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] bg-primary/40 rounded-full blur-[100px] sm:blur-[120px] pointer-events-none"></div>
+        <div className="absolute top-[20%] right-[-10%] w-[260px] sm:w-[400px] h-[260px] sm:h-[400px] bg-secondary/30 rounded-full blur-[90px] sm:blur-[100px] pointer-events-none"></div>
         
         <svg className="absolute top-[15%] left-[10%] w-6 h-6 text-gold animate-pulse opacity-80" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/></svg>
         <svg className="absolute top-[40%] left-[5%] w-4 h-4 text-white opacity-40" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/></svg>
@@ -19,105 +30,211 @@ const LandingPage = () => {
         <svg className="absolute top-[50%] right-[10%] w-8 h-8 text-primary opacity-50" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2.5 8.5L23 11l-8.5 2.5L12 22l-2.5-8.5L1 11l8.5-2.5z"/></svg>
 
         {/* Navbar */}
-        <nav className="flex justify-between items-center py-6 px-8 md:px-16 relative z-20">
-          <div className="flex flex-col font-bold text-2xl leading-tight tracking-tight">
+        <nav className="flex justify-between items-center py-5 sm:py-6 px-4 sm:px-8 md:px-16 relative z-20">
+          <Link to="/" className="flex flex-col font-bold text-2xl leading-tight tracking-tight">
             <span>GK</span>
             <span>Sphere</span>
-          </div>
+          </Link>
+
+          {/* Desktop Nav Links */}
           <div className="hidden md:flex space-x-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
             <a href="#" className="px-4 py-1 bg-white/20 rounded-full text-sm font-bold transition-colors">Home</a>
             <a href="#features" className="px-4 py-1 hover:bg-white/10 rounded-full text-sm font-medium transition-colors text-gray-300">Features</a>
             <Link to="/about" className="px-4 py-1 hover:bg-white/10 rounded-full text-sm font-medium transition-colors text-gray-300">About</Link>
+            <Link to="/contact" className="px-4 py-1 hover:bg-white/10 rounded-full text-sm font-medium transition-colors text-gray-300">Contact</Link>
           </div>
-          <Link to="/signup" className="bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary transition-all px-6 py-2.5 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-primary-light/30">
-            Get Started
-          </Link>
+
+          {/* Desktop Auth Buttons */}
+          <div className="hidden md:flex items-center space-x-3">
+            <Link to="/login" className="px-5 py-2 rounded-full font-semibold text-sm hover:text-primary transition-colors text-gray-200">
+              Log In
+            </Link>
+            <Link to="/signup" className="bg-gradient-to-r from-primary to-primary-dark hover:from-primary-dark hover:to-primary transition-all px-6 py-2.5 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(99,102,241,0.5)] border border-primary-light/30">
+              Get Started
+            </Link>
+          </div>
+
+          {/* Mobile Open Sidebar Button */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex md:hidden items-center space-x-2 p-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/15 transition-all"
+            aria-label="Open Navigation Sidebar"
+          >
+            <Menu size={22} />
+          </button>
         </nav>
 
+        {/* Mobile Navigation Sidebar Drawer */}
+        <div
+          className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${
+            mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
+          aria-hidden={!mobileMenuOpen}
+        >
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+
+          {/* Sidebar Drawer */}
+          <div
+            className={`absolute top-0 bottom-0 right-0 w-[280px] max-w-[85vw] bg-deep-blue text-white p-6 shadow-2xl border-l border-white/10 flex flex-col transition-transform duration-300 ease-in-out ${
+              mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            {/* Drawer Header with Close Button */}
+            <div className="flex items-center justify-between pb-5 border-b border-white/10 mb-6">
+              <div className="font-bold text-xl leading-tight">
+                <span>GK</span><span className="text-primary">Sphere</span>
+              </div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors"
+                aria-label="Close Navigation Sidebar"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="space-y-3 flex-1">
+              <a
+                href="#"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-2xl bg-white/10 font-bold text-white text-base"
+              >
+                Home
+              </a>
+              <a
+                href="#features"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-2xl hover:bg-white/5 text-gray-300 font-medium text-base transition-colors"
+              >
+                Features
+              </a>
+              <Link
+                to="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-2xl hover:bg-white/5 text-gray-300 font-medium text-base transition-colors"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block px-4 py-3 rounded-2xl hover:bg-white/5 text-gray-300 font-medium text-base transition-colors"
+              >
+                Contact
+              </Link>
+            </div>
+
+            {/* Bottom Auth Buttons */}
+            <div className="pt-6 border-t border-white/10 space-y-3">
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center space-x-2 w-full py-3 rounded-2xl bg-white/10 hover:bg-white/20 font-semibold text-sm transition-colors"
+              >
+                <LogIn size={18} />
+                <span>Log In</span>
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center space-x-2 w-full py-3 rounded-2xl bg-primary hover:bg-primary-dark font-bold text-sm shadow-lg shadow-primary/40 transition-colors"
+              >
+                <span>Get Started Free</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
+
         {/* Hero Area */}
-        <main className="flex flex-col md:flex-row items-center justify-between px-8 md:px-20 mt-12">
+        <main className="flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-20 mt-8 sm:mt-12">
           {/* Left Text */}
-          <div className="md:w-1/2 z-10 relative">
-            <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight">
+          <div className="md:w-1/2 z-10 relative text-center md:text-left">
+            <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold mb-4 sm:mb-6 leading-tight">
               Learn Daily. <br/>
               Excel <span className="text-gold">Globally.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-lg font-light leading-relaxed">
+            <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 sm:mb-10 max-w-lg mx-auto md:mx-0 font-light leading-relaxed">
               Dive into smart GK questions, level up your knowledge and compete with the world.
             </p>
             
-            <div className="flex items-center space-x-4 mb-10">
-              <Link to="/signup" className="bg-primary hover:bg-primary-dark transition-colors px-8 py-3 rounded-full font-bold shadow-lg shadow-primary/40 flex items-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-3 sm:gap-4 mb-8 sm:mb-10">
+              <Link to="/signup" className="w-full sm:w-auto bg-primary hover:bg-primary-dark transition-colors px-8 py-3.5 rounded-full font-bold shadow-lg shadow-primary/40 flex items-center justify-center text-center">
                 Start Your Journey <span className="ml-2">→</span>
               </Link>
-              <a href="#features" className="px-8 py-3 rounded-full border border-gray-500 hover:border-white transition-colors font-semibold">
+              <a href="#features" className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-gray-500 hover:border-white transition-colors font-semibold text-center">
                 Explore Features
               </a>
             </div>
 
-            <div className="flex items-center space-x-4">
-              <div className="flex -space-x-3">
-                <img src="/clay_avatar.png" className="w-10 h-10 rounded-full border-2 border-deep-blue bg-primary/20 object-cover" />
-                <img src="/clay_avatar.png" className="w-10 h-10 rounded-full border-2 border-deep-blue bg-secondary/20 object-cover opacity-90" />
-                <img src="/clay_avatar.png" className="w-10 h-10 rounded-full border-2 border-deep-blue bg-gold/20 object-cover opacity-80" />
-                <img src="/clay_avatar.png" className="w-10 h-10 rounded-full border-2 border-deep-blue bg-blue-400/20 object-cover opacity-70" />
+            <div className="flex items-center justify-center md:justify-start space-x-4">
+              <div className="flex -space-x-3 shrink-0">
+                <img src="/clay_avatar.png" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-deep-blue bg-primary/20 object-cover" />
+                <img src="/clay_avatar.png" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-deep-blue bg-secondary/20 object-cover opacity-90" />
+                <img src="/clay_avatar.png" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-deep-blue bg-gold/20 object-cover opacity-80" />
+                <img src="/clay_avatar.png" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-deep-blue bg-blue-400/20 object-cover opacity-70" />
               </div>
-              <p className="text-sm text-gray-300 leading-tight">
+              <p className="text-xs sm:text-sm text-gray-300 leading-tight text-left">
                 Join <span className="text-gold font-bold">50K+</span> learners worldwide<br/>and grow every day!
               </p>
             </div>
           </div>
           
           {/* Right Image */}
-          <div className="md:w-1/2 mt-16 md:mt-0 flex justify-center relative">
+          <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center relative w-full">
             {/* Subtle glow behind image */}
-            <div className="absolute inset-0 bg-primary/20 rounded-full blur-[100px]"></div>
+            <div className="absolute inset-0 bg-primary/20 rounded-full blur-[80px] sm:blur-[100px]"></div>
             <img 
               src="/hero-boy.png" 
               alt="3D Boy Learning" 
-              className="w-full max-w-lg object-contain relative z-10 hover:scale-[1.02] transition-transform duration-700"
+              className="w-full max-w-xs sm:max-w-md md:max-w-lg object-contain relative z-10 hover:scale-[1.02] transition-transform duration-700"
             />
           </div>
         </main>
       </div>
 
       {/* Stats Banner (Overlapping) */}
-      <div className="relative z-20 flex justify-center -mt-16 px-4">
-        <div className="bg-white rounded-[40px] shadow-2xl p-4 md:p-6 w-full max-w-6xl flex flex-wrap md:flex-nowrap justify-between items-center gap-4">
+      <div className="relative z-20 flex justify-center -mt-12 sm:-mt-16 px-4">
+        <div className="bg-white rounded-[28px] sm:rounded-[40px] shadow-2xl p-4 sm:p-6 w-full max-w-6xl grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-nowrap justify-between items-center gap-4">
           
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-inner"><Layers size={24} fill="currentColor" /></div>
-            <div><p className="font-bold text-gray-800 text-sm">100+</p><p className="text-xs text-gray-500 font-medium">Interactive Levels</p></div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600 shadow-inner shrink-0"><Layers size={22} fill="currentColor" /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">100+</p><p className="text-[11px] sm:text-xs text-gray-500 font-medium">Interactive Levels</p></div>
           </div>
-          <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+          <div className="hidden lg:block w-px h-10 bg-gray-200"></div>
 
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-teal-100 flex items-center justify-center text-teal-500 shadow-inner"><Flame size={24} fill="currentColor" /></div>
-            <div><p className="font-bold text-gray-800 text-sm">Daily</p><p className="text-xs text-gray-500 font-medium">Streaks</p></div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-teal-100 flex items-center justify-center text-teal-500 shadow-inner shrink-0"><Flame size={22} fill="currentColor" /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">Daily</p><p className="text-[11px] sm:text-xs text-gray-500 font-medium">Streaks</p></div>
           </div>
-          <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+          <div className="hidden lg:block w-px h-10 bg-gray-200"></div>
 
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-yellow-100 flex items-center justify-center text-yellow-500 shadow-inner"><Zap size={24} fill="currentColor" /></div>
-            <div><p className="font-bold text-gray-800 text-sm">Instant</p><p className="text-xs text-gray-500 font-medium">Sols</p></div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-yellow-100 flex items-center justify-center text-yellow-500 shadow-inner shrink-0"><Zap size={22} fill="currentColor" /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">Instant</p><p className="text-[11px] sm:text-xs text-gray-500 font-medium">Sols</p></div>
           </div>
-          <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+          <div className="hidden lg:block w-px h-10 bg-gray-200"></div>
 
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 shadow-inner"><BarChart2 size={24} /></div>
-            <div><p className="font-bold text-gray-800 text-sm">Smart</p><p className="text-xs text-gray-500 font-medium">Progress Tracking</p></div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-purple-100 flex items-center justify-center text-purple-600 shadow-inner shrink-0"><BarChart2 size={22} /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">Smart</p><p className="text-[11px] sm:text-xs text-gray-500 font-medium">Progress Tracking</p></div>
           </div>
-          <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+          <div className="hidden lg:block w-px h-10 bg-gray-200"></div>
 
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-red-100 flex items-center justify-center text-red-500 shadow-inner"><Trophy size={24} fill="currentColor" /></div>
-            <div><p className="font-bold text-gray-800 text-sm">Global</p><p className="text-xs text-gray-500 font-medium">Leaderboard</p></div>
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-red-100 flex items-center justify-center text-red-500 shadow-inner shrink-0"><Trophy size={22} fill="currentColor" /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">Global</p><p className="text-[11px] sm:text-xs text-gray-500 font-medium">Leaderboard</p></div>
           </div>
-          <div className="hidden md:block w-px h-10 bg-gray-200"></div>
+          <div className="hidden lg:block w-px h-10 bg-gray-200"></div>
 
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-green-100 flex items-center justify-center text-green-800 shadow-inner"><Award size={24} fill="currentColor" /></div>
-            <div><p className="font-bold text-gray-800 text-sm">Achievements</p><p className="text-xs text-gray-800 font-medium">Badges</p></div>
+          <div className="flex items-center space-x-3 col-span-2 sm:col-span-1">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-green-100 flex items-center justify-center text-green-800 shadow-inner shrink-0"><Award size={22} fill="currentColor" /></div>
+            <div><p className="font-bold text-gray-800 text-sm sm:text-base">Achievements</p><p className="text-[11px] sm:text-xs text-gray-800 font-medium">Badges</p></div>
           </div>
 
         </div>

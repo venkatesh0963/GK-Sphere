@@ -1,5 +1,6 @@
 const Progress = require('../models/Progress');
 const User = require('../models/User');
+const { isDoubleXpActive, getEconomyProfile } = require('../utils/economyHelper');
 
 // @desc    Complete a level
 // @route   POST /api/progress/complete
@@ -15,6 +16,7 @@ const completeLevel = async (req, res) => {
     }
 
     let xpGain = 0;
+    const isNewCompletion = !user.completedLevels.includes(level);
 
     // Check if progress already exists
     let progress = await Progress.findOne({ userId: user._id, level });
@@ -40,10 +42,26 @@ const completeLevel = async (req, res) => {
       });
     }
 
+    // Apply Double XP if active
+    let doubleXpApplied = false;
+    if (isDoubleXpActive(user) && xpGain > 0) {
+      xpGain = xpGain * 2;
+      doubleXpApplied = true;
+    }
+
     user.xp += xpGain;
 
+    // Gems reward
+    let gemsEarned = 0;
+    if (isNewCompletion) {
+      gemsEarned = 20; // 20 Gems for completing a new level!
+    } else if (xpGain > 0) {
+      gemsEarned = 5; // 5 Gems for beating past score
+    }
+    user.gems = (user.gems ?? 100) + gemsEarned;
+
     // Update User Stats
-    if (!user.completedLevels.includes(level)) {
+    if (isNewCompletion) {
       user.completedLevels.push(level);
       
       // Unlock next level if they just completed their current highest level
@@ -61,7 +79,7 @@ const completeLevel = async (req, res) => {
       }
     }
 
-    // Streak Logic
+    // Streak Logic & Streak Freeze protection
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
@@ -70,13 +88,20 @@ const completeLevel = async (req, res) => {
 
     const diffTime = Math.abs(today - lastActiveDate);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    let streakFreezeUsed = false;
 
     if (diffDays === 1) {
       // Completed a level the next day -> increase streak
       user.streak += 1;
     } else if (diffDays > 1) {
-      // Missed a day -> reset streak to 1
-      user.streak = 1;
+      if ((user.streakFreezes ?? 0) > 0) {
+        user.streakFreezes -= 1;
+        user.streak += 1;
+        streakFreezeUsed = true;
+      } else {
+        // Missed a day and no freeze -> reset streak to 1
+        user.streak = 1;
+      }
     } else if (user.streak === 0) {
       // First time completion
       user.streak = 1;
@@ -87,10 +112,14 @@ const completeLevel = async (req, res) => {
 
     res.json({
       progress,
+      reward: {
+        xpGained: xpGain,
+        doubleXpApplied,
+        gemsEarned,
+        streakFreezeUsed
+      },
       userStats: {
-        xp: user.xp,
-        currentLevel: user.currentLevel,
-        streak: user.streak,
+        ...getEconomyProfile(user),
         completedLevels: user.completedLevels
       }
     });

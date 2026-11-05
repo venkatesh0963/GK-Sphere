@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const { getEconomyProfile, updateUserHearts } = require('../utils/economyHelper');
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -27,15 +28,15 @@ const registerUser = async (req, res) => {
     const user = await User.create({
       username,
       password,
+      hearts: 5,
+      gems: 100, // 100 Welcome gems bonus!
+      isPro: false,
+      streakFreezes: 1 // 1 Free Streak Freeze to start!
     });
 
     if (user) {
       res.status(201).json({
-        _id: user._id,
-        username: user.username,
-        xp: user.xp,
-        currentLevel: user.currentLevel,
-        streak: user.streak,
+        ...getEconomyProfile(user),
         token: generateToken(user._id),
       });
     } else {
@@ -60,16 +61,13 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ username });
 
     if (user && (await user.matchPassword(password))) {
-      // Update lastActive
+      // Update lastActive and regenerate hearts if needed
       user.lastActive = Date.now();
+      updateUserHearts(user);
       await user.save();
 
       res.json({
-        _id: user._id,
-        username: user.username,
-        xp: user.xp,
-        currentLevel: user.currentLevel,
-        streak: user.streak,
+        ...getEconomyProfile(user),
         token: generateToken(user._id),
       });
     } else {

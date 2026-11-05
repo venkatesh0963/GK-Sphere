@@ -33,33 +33,33 @@ const Achievements = () => {
   if (isLoading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
-    <div className="clay-card h-full p-6 overflow-y-auto">
-      <div className="flex items-center space-x-3 mb-8">
-        <Award className="text-primary" size={28} />
-        <h2 className="text-3xl font-bold text-primary font-['Outfit']">Badges & Achievements</h2>
+    <div className="clay-card h-full p-4 sm:p-6 overflow-y-auto">
+      <div className="flex items-center space-x-3 mb-5 sm:mb-8">
+        <Award className="text-primary shrink-0" size={26} />
+        <h2 className="text-2xl sm:text-3xl font-bold text-primary font-['Outfit']">Badges & Achievements</h2>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
         {ALL_BADGES.map((badge) => {
           const isUnlocked = achievements.includes(badge.id);
           return (
             <div 
               key={badge.id} 
-              className={`p-6 rounded-clay border-2 flex flex-col items-center text-center transition-all duration-300 ${
+              className={`p-4 sm:p-6 rounded-clay border-2 flex flex-col items-center text-center transition-all duration-300 ${
                 isUnlocked 
                   ? 'bg-white shadow-clay-light border-primary/20 hover:scale-105' 
                   : 'bg-gray-50 border-transparent opacity-60 grayscale'
               }`}
             >
-              <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl mb-4 ${
+              <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-2xl sm:text-3xl mb-3 sm:mb-4 ${
                 isUnlocked ? 'bg-primary/10 shadow-clay-light-inset' : 'bg-gray-200'
               }`}>
-                {isUnlocked ? badge.icon : <Lock size={24} className="text-gray-400" />}
+                {isUnlocked ? badge.icon : <Lock size={22} className="text-gray-400" />}
               </div>
-              <h3 className={`font-bold text-lg mb-1 ${isUnlocked ? 'text-primary' : 'text-gray-500'}`}>
+              <h3 className={`font-bold text-base sm:text-lg mb-1 ${isUnlocked ? 'text-primary' : 'text-gray-500'}`}>
                 {badge.id}
               </h3>
-              <p className="text-xs text-gray-500">{badge.desc}</p>
+              <p className="text-xs text-gray-500 leading-snug">{badge.desc}</p>
             </div>
           );
         })}

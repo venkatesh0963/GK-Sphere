@@ -160,7 +160,7 @@ const SkillTree = ({ userLevel, onNodeClick, progressHistory = [] }) => {
       }}
     >
       <div className="absolute inset-0 bg-white/40 backdrop-blur-sm z-0"></div>
-      <div className="absolute top-4 left-4 z-20 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full shadow-sm text-sm font-bold text-primary flex items-center space-x-2">
+      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 bg-white/90 backdrop-blur-md px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-bold text-primary flex items-center space-x-2">
         <span>Level {userLevel} / 100</span>
       </div>
 
@@ -168,15 +168,16 @@ const SkillTree = ({ userLevel, onNodeClick, progressHistory = [] }) => {
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        defaultViewport={{ x: 0, y: 0, zoom: 0.75 }}
         panOnScroll={true}
+        panOnDrag={true}
         zoomOnScroll={false}
-        zoomOnPinch={false}
+        zoomOnPinch={true}
         zoomOnDoubleClick={false}
         translateExtent={[[-100, -100], [1000, 4000]]}
         className="z-10"
       >
-        <Controls showZoom={false} />
+        <Controls showZoom={true} />
       </ReactFlow>
     </div>
   );

@@ -45,6 +45,32 @@ const UserSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     ref: 'Achievement',
     default: []
+  },
+  hearts: {
+    type: Number,
+    default: 5,
+    min: 0,
+    max: 5
+  },
+  lastHeartRegen: {
+    type: Date,
+    default: Date.now
+  },
+  gems: {
+    type: Number,
+    default: 100 // Welcome gift for learning
+  },
+  isPro: {
+    type: Boolean,
+    default: false
+  },
+  streakFreezes: {
+    type: Number,
+    default: 0
+  },
+  doubleXpUntil: {
+    type: Date,
+    default: null
   }
 }, { timestamps: true });
 
